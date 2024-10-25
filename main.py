@@ -31,8 +31,11 @@ async def aitext(message: Message):
 @dp.message(Command("help"))
 async def help(message: Message):
     await message.answer("Привет! Я бот, который может отправлять новости. Вот мои команды:\n"
-                         "/news - Получить последнюю новость\n"
-                         "/help - Получить список команд")
+                         "/start - Запустить бота\n"
+                         "/weather - Получить последнюю новость\n"
+                         "/help - вызов всех команд, которые может выполнять бот\n"
+                         "/photo - отправить фото\n"
+                         "/react_photo - реагировать на фото")
 
 
 @dp.message(CommandStart())
