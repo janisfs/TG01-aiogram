@@ -4,6 +4,7 @@ from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 from config import TOKEN
 import random
+import requests
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
@@ -44,6 +45,25 @@ async def on_startup(_):
 async def main():
     await on_startup(dp)
     await dp.start_polling(bot)
+
+@dp.message(Command("weather"))
+async def weather(message: Message):
+    await message.answer(get_weather())
+
+
+def get_weather(city="Moscow"):
+    api_key = "d9a0f4c37c536dec3b20825900c97115"
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric&lang=ru"
+    response = requests.get(url)
+    data = response.json()
+
+    if data.get("cod") != 200:
+        return "Ошибка при получении данных о погоде"
+
+    weather = data["weather"][0]["description"]
+    temp = data["main"]["temp"]
+    return f"Погода в {city}: {weather.capitalize()}, температура: {temp}°C"
+
 
 if __name__ == "__main__":
     asyncio.run(main())
